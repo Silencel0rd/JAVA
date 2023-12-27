@@ -1,0 +1,127 @@
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+
+public class combinaciones {
+    public static void Comb(ArrayList<Integer> elem, int k){
+        Random random = new Random();
+        random.nextInt(1,2);
+        System.out.println(random);
+    }
+    public static int Factorial(int x){
+        int factorial = 1;
+        for (int i = 0; i<x ; i++) {
+            factorial *= (i+1);
+        }
+        return factorial;
+    }
+    public static boolean seRepite( String  x){
+
+        boolean resultado = false;
+        ArrayList<String> num = new ArrayList<>();
+        for ( int i = 0; i< x.length() ; i++){
+            num.add(x.substring(i,i+1));
+        }
+        for (int i = 0; i<num.size();i++){
+            for (int j = 0; j<x.length(); j++){
+                if ( (num.get(i)).equals( num.get(j) ) && (i != j) ){
+                    resultado = true;
+                }
+            }
+        }
+        return resultado;
+    }
+    public static ArrayList<String> combNum( String x, int k, int n){
+        ArrayList<String> allNum = new ArrayList<>();
+        ArrayList<String> num = new ArrayList<>();
+
+        for ( int i = 0; i< x.length() ; i++){
+            num.add(x.substring(i,i+1));
+        }
+
+        allNum = CombinarDigitos(num,k,n);
+        Random random = new Random();
+
+        return allNum;
+    }
+
+    public static boolean ContieneNumComb(ArrayList<String> listaComparada, ArrayList<String> listaEjemplo){
+        boolean resultado = false;
+        for (String s : listaComparada){
+            if (listaEjemplo.contains(s)) {
+                resultado = true;
+            }
+        }
+        return resultado;
+    }
+    public static ArrayList<String> CombinarDigitos(ArrayList<String> digitos,int k,int n){
+        ArrayList<String> combTotal = new ArrayList<>();
+        boolean lleno = false;
+        Random random = new Random();
+        int r;
+        String combinacion = "";
+        int cSize;
+
+        System.out.println(combinacion);
+        while (!lleno){
+            for (int i=0; i<k;i++) {
+                r = random.nextInt(digitos.size());
+                combinacion += digitos.get(r);
+            }
+            if (!(combTotal.contains(combinacion))){
+                combTotal.add(combinacion);
+            }
+            if ((combTotal.size()) == (k*k*k)){
+                lleno = true;
+                break;
+            }
+            if ((combTotal.size()) == (n/k) && k==2){
+                lleno =true;
+                break;
+            }
+            combinacion = "";
+        }
+        return combTotal;
+    }
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.println("¿Cuántos dígitos tienes?");
+        int n = s.nextInt();
+
+        ArrayList<String> elem = new ArrayList<>(n);
+        System.out.println("Ahora introduce tus dígitos: ");
+        Scanner s1 = new Scanner(System.in);
+        for (int i = 0; i<n ; i++){
+            System.out.print("Dígito " + (i+1) + " = ");
+            elem.add(s1.nextLine());
+        }
+        System.out.println("Tus dígitos son: " + elem);
+
+        System.out.println("¿De cuantos dígitos quieres que sean las combinaciones?");
+        int k = s.nextInt();
+
+        int numCombinaciones = (Factorial(n)) / ((Factorial(n-k) * (Factorial(k))) );
+        System.out.println("El número de combinaciones posibles son: " + numCombinaciones);
+
+        int c = numCombinaciones;
+        int r;
+        String combinacion = "";
+        Random random = new Random();
+        ArrayList<Integer> elemComb = new ArrayList<>();
+        ArrayList<String> allComb = new ArrayList<>();
+        while ((allComb.size()) != c) {
+            for (int j = 0; j < k; j++) {
+                r = random.nextInt(elem.size());
+                combinacion += elem.get(r);
+            }
+            if ( (!allComb.contains(combinacion)) && (!seRepite(combinacion)) && (!ContieneNumComb((combNum(combinacion,k,n)), allComb)) ) {
+                allComb.add(combinacion);
+                combinacion = "";
+            } else {
+                combinacion = "";
+            }
+        }
+        System.out.println(allComb);
+        System.exit(0);
+    }
